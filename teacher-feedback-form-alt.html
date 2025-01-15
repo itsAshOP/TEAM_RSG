@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Feedback Form - Alternative Layout</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f0f2f5;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: #1a237e;
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: -3rem auto 2rem;
+            padding: 0 1rem;
+        }
+
+        .form-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            display: flex;
+            background: #f8f9fa;
+            padding: 1rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .progress-step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+            color: #6c757d;
+        }
+
+        .progress-step::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 60%;
+            right: -40%;
+            height: 2px;
+            background: #dee2e6;
+            z-index: 1;
+        }
+
+        .progress-step:last-child::after {
+            display: none;
+        }
+
+        .progress-step.active {
+            color: #1a237e;
+            font-weight: bold;
+        }
+
+        .form-section {
+            padding: 2rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #495057;
+            font-weight: 500;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            transition: border-color 0.2s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #1a237e;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .rating-card {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .rating-title {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #1a237e;
+        }
+
+        .rating-options {
+            display: flex;
+            justify-content: space-between;
+            gap: 0.5rem;
+        }
+
+        .rating-option {
+            flex: 1;
+            text-align: center;
+            padding: 0.5rem;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .rating-option:hover {
+            background: #e3f2fd;
+        }
+
+        .rating-option input[type="radio"] {
+            display: none;
+        }
+
+        .rating-option.selected {
+            background: #1a237e;
+            color: white;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            padding: 1.5rem 2rem;
+            background: #f8f9fa;
+            border-top: 1px solid #e9ecef;
+        }
+
+        button {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-next {
+            background: #1a237e;
+            color: white;
+        }
+
+        .btn-next:hover {
+            background: #0d1757;
+        }
+
+        .btn-back {
+            background: #e9ecef;
+            color: #495057;
+        }
+
+        .btn-back:hover {
+            background: #dee2e6;
+        }
+
+        .success-message {
+            display: none;
+            background: #d4edda;
+            color: #155724;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin-top: -2rem;
+            }
+
+            .form-section {
+                padding: 1rem;
+            }
+
+            .progress-bar {
+                display: none;
+            }
+
+            .rating-options {
+                flex-direction: column;
+            }
+
+            .rating-option {
+                padding: 1rem;
+            }
+
+            .action-buttons {
+                flex-direction: column-reverse;
+                gap: 1rem;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Teacher Feedback Form</h1>
+        <p>Help us improve our teaching quality</p>
+    </div>
+
+    <div class="container">
+        <div class="form-card">
+            <div class="progress-bar">
+                <div class="progress-step active">Basic Info</div>
+                <div class="progress-step">Teaching Evaluation</div>
+                <div class="progress-step">Detailed Feedback</div>
+            </div>
+
+            <form id="teacherFeedbackForm" onsubmit="handleSubmit(event)">
+                <div class="form-section">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <select id="subject" required>
+                                <option value="">Select Subject</option>
+                                <option value="mathematics">Mathematics</option>
+                                <option value="physics">Physics</option>
+                                <option value="chemistry">Chemistry</option>
+                                <option value="biology">Biology</option>
+                                <option value="computer_science">Computer Science</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="teacher">Teacher</label>
+                            <select id="teacher" required>
+                                <option value="">Select Teacher</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="rating-card">
+                        <h3 class="rating-title">Knowledge of the Subject</h3>
+                        <div class="rating-options">
+                            <label class="rating-option">
+                                <input type="radio" name="knowledge" value="1" required>
+                                <span>Poor</span>
+                            </label>
+                            <label class="rating-option">
+                                <input type="radio" name="knowledge" value="2">
+                                <span>Fair</span>
+                            </label>
+                            <label class="rating-option">
+                                <input type="radio" name="knowledge" value="3">
+                                <span>Good</span>
+                            </label>
+                            <label class="rating-option">
+                                <input type="radio" name="knowledge" value="4">
+                                <span>Very Good</span>
+                            </label>
+                            <label class="rating-option">
+                                <input type="radio" name="knowledge" value="5">
+                                <span>Excellent</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="rating-card">
+                        <h3 class="rating-title">Communication Skills</h3>
+                        <div class="rating-options">
+                            <label class="rating-option">
+                                <input type="radio" name="communication" value="1" required>
+                                <span>Poor</span>
+                            </label>
+                            <label class="rating-option">
+                                <input type="radio" name="communication" value="2">
+                                <span>Fair</span>
+                            </label>
+                            <label class="rating-option">
+                                <input type="radio" name="communication" value="3">
+                                <span>Good</span>
+                            </label>
+                            <label class="rating-option">
+                                <input type="radio" name="communication" value="4">
+                                <span>Very Good</span>
+                            </label>
+                            <label class="rating-option">
+                                <input type="radio" name="communication" value="5">
+                                <span>Excellent</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="strengths">Teacher's Strengths</label>
+                        <textarea id="strengths" placeholder="What are the teacher's main strengths?" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="improvements">Areas for Improvement</label>
+                        <textarea id="improvements" placeholder="What areas could the teacher improve upon?"></textarea>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button type="button" class="btn-back">Previous</button>
+                    <button type="submit" class="btn-next">Submit Feedback</button>
+                </div>
+            </form>
+
+            <div id="successMessage" class="success-message">
+                Thank you! Your feedback has been submitted successfully.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample teacher data
+        const teachersBySubject = {
+            mathematics: ['Dr. Smith', 'Prof. Johnson', 'Ms. Williams'],
+            physics: ['Dr. Brown', 'Prof. Davis', 'Mr. Miller'],
+            chemistry: ['Dr. Wilson', 'Prof. Anderson', 'Ms. Taylor'],
+            biology: ['Dr. Thomas', 'Prof. Jackson', 'Mr. White'],
+            computer_science: ['Dr. Harris', 'Prof. Martin', 'Ms. Thompson']
+        };
+
+        // Update teachers dropdown based on subject selection
+        document.getElementById('subject').addEventListener('change', function() {
+            const teacherSelect = document.getElementById('teacher');
+            teacherSelect.innerHTML = '<option value="">Select Teacher</option>';
+            
+            const selectedSubject = this.value;
+            if (selectedSubject && teachersBySubject[selectedSubject]) {
+                teachersBySubject[selectedSubject].forEach(teacher => {
+                    const option = document.createElement('option');
+                    option.value = teacher.toLowerCase().replace(/\s+/g, '_');
+                    option.textContent = teacher;
+                    teacherSelect.appendChild(option);
+                });
+            }
+        });
+
+        // Handle rating option selection
+        document.querySelectorAll('.rating-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const radioInput = this.querySelector('input[type="radio"]');
+                const name = radioInput.name;
+                
+                // Remove selected class from all options in the same group
+                document.querySelectorAll(`input[name="${name}"]`).forEach(input => {
+                    input.closest('.rating-option').classList.remove('selected');
+                });
+                
+                // Add selected class to clicked option
+                this.classList.add('selected');
+                radioInput.checked = true;
+            });
+        });
+
+        function handleSubmit(event) {
+            event.preventDefault();
+            
+            // Show success message
+            document.getElementById('successMessage').style.display = 'block';
+            
+            // Reset form
+            event.target.reset();
+            
+            // Remove selected classes from rating options
+            document.querySelectorAll('.rating-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+
+            // Scroll to success message
+            document.getElementById('successMessage').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
